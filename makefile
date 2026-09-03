@@ -1,0 +1,29 @@
+REGISTRY_HOST := kellenwiltshire
+BUILD_IMAGE := $(REGISTRY_HOST)/sish-form-tester
+GIT_SHA :=$(shell git rev-parse HEAD)
+BUILD_TAG ?= $(GIT_SHA)
+
+.DEFAULT_GOAL := run
+
+run:
+	docker compose up --build -d
+
+build:
+	go build -o ./sish-form-mailer main.go
+
+commit:
+	go build -o NUL
+
+build-image:
+	docker buildx build \
+		--platform "linux/amd64" \
+		--tag "$(BUILD_IMAGE):$(GIT_SHA)" \
+		--load \
+		.
+
+build-image-login:
+	echo $(DOCKERHUB_TOKEN) | docker login -u $(DOCKER_USERNAME) --password-stdin
+
+build-image-push: build-image-login
+	docker image tag $(BUILD_IMAGE):$(GIT_SHA) $(BUILD_IMAGE):$(BUILD_TAG)
+	docker image push $(BUILD_IMAGE):$(BUILD_TAG)
