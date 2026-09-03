@@ -32,5 +32,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/rtl-application:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/rtl-application:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/sish-form-tester:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/sish-form-tester:latest
